@@ -1,0 +1,26 @@
+import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
+import sqlite3
+from datetime import datetime
+import schedule
+import time
+import threading
+
+# مراحل مکالمه
+ADD_PRODUCT, GET_USER_INFO, EDIT_USER_INFO = range(3)
+
+# دیتابیس
+conn = sqlite3.connect('bot_database.db', check_same_thread=False)
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS products 
+             (id INTEGER PRIMARY KEY, name TEXT, description TEXT, image TEXT)''')
+c.execute('''CREATE TABLE IF NOT EXISTS users 
+             (id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, phone TEXT, birth_date TEXT)''')
+c.execute('''CREATE TABLE IF NOT EXISTS stats 
+             (date TEXT, visits INTEGER)''')
+conn.commit()
+
+# تنظیمات اولیه
+CHANNELS = ['https://t.me/LuxZ3', 'https://t.me/poshakfrigg02']  # نام کانال‌ها را اینجا وارد کنید
+ADMIN_ID = 6682891691  # آیدی عددی ادمین را اینجا وارد کنید
+TOKEN = '8037159516:AAFHApaPBLmubqrA-riWpTENYuOBweRsN_8'  # توکن ربات را اینجا وارد کنید
